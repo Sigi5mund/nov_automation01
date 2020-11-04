@@ -1,6 +1,28 @@
 ---
-- name: Deploy AS3
+- name: Deploy AS3 Declaration
   hosts: localhost
   connection: local
   gather_facts: no
+  
+  vars:
+    uri_method: POST
+
+  vars_files:
+    - ../cred/big_cred.yaml
+    
+
+  tasks:
+
+  - name: Rest call to BIG-IP
+    uri:
+      url: https://51.145.125.86/mgmt/shared/appsvcs/declare
+      user: "{{ bigip_user }}"
+      password: "{{ bigip_pass }}"
+      method: "{{ uri_method }}"
+      body: "{{ lookup('file','as3-andrew-film.json') }}"
+      force_basic_auth: yes
+      status_code: 200
+      validate_certs: no
+      body_format: json
+
 ...
